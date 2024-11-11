@@ -21,7 +21,15 @@ app.get("/todos", async (req,res)=>{
     })
 })
 
-app.post("/todo",async (req,res)=>{
+app.delete("/todo",async (req,res)=>{
+    const id = req.query.id;
+    const response = await deleteTodo(id);
+    return res.json({
+        "message:":response
+    })
+});
+
+app.get("/todo",async (req,res)=>{
     const id = req.query.id;
     console.log("ID: "+id);
     const todo = await getTodo(id);
@@ -51,6 +59,17 @@ async function getTodo(id)
     });
     console.log(todo);
     return todo;
+}
+
+async function deleteTodo(id)
+{
+    const msg = await prisma.todos.delete({
+        where: {
+            id: Number(id)
+        }
+    })
+    
+    return msg;
 }
 
 async function insertTodo(title,description)
