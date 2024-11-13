@@ -22,7 +22,16 @@ app.get("/todos", async (req,res)=>{
 })
 
 app.delete("/todo",async (req,res)=>{
-    const id = req.query.id;
+    let id = req.query.id;
+    try{
+        id = Number(id);
+    }catch(e)
+    {
+        console.log(e.message);
+        return res.json({
+            message: "Please enter valid id"
+        });
+    }
     const response = await deleteTodo(id);
     return res.json({
         "message:":response
@@ -39,7 +48,7 @@ app.get("/todo",async (req,res)=>{
         console.log(e.message);
         return res.json({
             message: "Please enter valid id"
-        })
+        });
     }
     const todo = await getTodo(id);
     if(todo)
